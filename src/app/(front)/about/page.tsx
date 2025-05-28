@@ -1,9 +1,13 @@
 import Contact01Page from "@/components/contact-01/contact-01";
 
-export default function Page() {
+export default async function Page() {
+  const data = await fetch('https://api.codingthailand.com/api/version', { next: {revalidate: 3000} });
+  const apiInfo = await data.json();
   return (
-    <main>
-      <Contact01Page />
-    </main>
+    <>
+    {
+      apiInfo && <Contact01Page version={apiInfo.data.version} />
+    }
+    </>
   );
-}
+} 
