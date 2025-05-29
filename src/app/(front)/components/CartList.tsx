@@ -4,12 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useCartStore } from "@/lib/cart-store";
 import { Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function CartList() {
+    const router = useRouter();
+
     const items = useCartStore((state) => state.items);
     const removeItem= useCartStore((state) => state.removeItem);
     const clearCart = useCartStore((state) => state.clearCart);
-    const totalPrice = useCartStore((state) => state.totalPrice);
+    const totalPrice = useCartStore((state) => state.totalPrice());
+
+    if (items.length === 0) {
+        return <div className="text-center mt-20">ตระกร้าสินค้าว่างเปล่า...</div>
+    }
 
   return (
     <div className="mx-auto max-w-4xl mt-20">
@@ -44,6 +51,17 @@ export default function CartList() {
         }
     </TableBody>
 </Table>
+<div className="text-right mt-5">
+    <div className="font-bond text-2xl">
+        Total Price: {totalPrice.toFixed(2)}
+    </div>
 </div>
-  );
-}
+    <div className="m-4">
+        <Button className="m-4" variant="outline" onClick={() => { clearCart(); } }>ลบสินค้าทั้งหมด</Button>
+        <Button onClick={() => {
+            clearCart();
+            router.replace('/product');
+        } }>ยืนยันการสั่งซื้อ</Button>
+    </div>
+</div>
+)};
