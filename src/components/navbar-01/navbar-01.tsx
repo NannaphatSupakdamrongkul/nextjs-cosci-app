@@ -19,9 +19,9 @@ const Navbar01Page = () => {
 
           <div className="flex items-center gap-3">
 
-          
+          <Link href="/cart">
           <Badge className="p-2 text-sm"><ShoppingBasket /> <CountCartitem /> item (s)</Badge>
-          
+          </Link>
 
 
             <Button asChild variant="outline" className="hidden sm:inline-flex">
