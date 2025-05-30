@@ -12,27 +12,51 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
+  name: z.string().min(1, "ชื่อ-สกุล ห้ามว่าง"),
   email: z.string().email("รูปแบบอีเมลไม่ถูกต้อง"),
   password: z.string().min(6, "รหัสผ่านต้องอย่างน้อย 6 ตัวอักษร"),
 });
 
 const Signup01Page = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+  const onSubmit = async (form: z.infer<typeof formSchema>) => {
+
+        await authClient.signUp.email({
+        name: "YourName",
+        email: form.email,
+        password: form.password,
+    }, {
+        onRequest: (ctx) => {
+            //show loading
+            console.log(ctx.body);
+        },
+        onSuccess: (ctx) => {
+            //redirect to the dashboard or sign in page
+            console.log(ctx.data);
+            router.replace('/')
+        },
+        onError: (ctx) => {
+            // display the error message
+            alert(ctx.error.message);
+        },
+});
   };
 
   return (
@@ -56,14 +80,14 @@ const Signup01Page = () => {
           >
             <FormField
               control={form.control}
-              name="email"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
-                      type="email"
-                      placeholder="Email"
+                      type="text"
+                      placeholder="Your Name"
                       className="w-full"
                       {...field}
                     />
@@ -71,6 +95,26 @@ const Signup01Page = () => {
                   <FormMessage />
                 </FormItem>
               )}
+              
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="Your Email"
+                      className="w-full"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              
             />
             <FormField
               control={form.control}

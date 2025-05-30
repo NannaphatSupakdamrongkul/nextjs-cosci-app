@@ -29,7 +29,7 @@ const Navbar01Page = () => {
             </Button>
 
             <Button asChild>
-              <Link href="/login">สมัครสมาชิก</Link>
+              <Link href="/signup">สมัครสมาชิก</Link>
               </Button>
 
             {/* Mobile Menu */}
