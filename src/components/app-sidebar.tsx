@@ -184,7 +184,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             avatar: "/avatars/shadcn.jpg"
           }} />
         }
-        <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>
   )

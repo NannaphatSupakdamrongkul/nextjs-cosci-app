@@ -39,7 +39,7 @@ const Signup01Page = () => {
   const onSubmit = async (form: z.infer<typeof formSchema>) => {
 
         await authClient.signUp.email({
-        name: "YourName",
+        name: form.name,
         email: form.email,
         password: form.password,
     }, {
